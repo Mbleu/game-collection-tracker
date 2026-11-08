@@ -6,7 +6,7 @@ Game::Game(const unsigned int id, const std::string& title)
 {}
 
 // Simple getter for returning game id without exposing it
-int Game::get_id() const { return id; }
+unsigned int Game::get_id() const { return id; }
 
 // Simple getter for returning game title without exposing it
 const std::string &Game::get_title() const { return title; }
