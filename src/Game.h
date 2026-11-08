@@ -3,7 +3,7 @@
 // Class for storing game metadata
 class Game{
     private:
-    const unsigned int id;
+    unsigned int id;
     std::string title;
 
     public:
