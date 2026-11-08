@@ -5,13 +5,24 @@
 int main()
 {
     Collection collection;
-    std::string user_input;
+    std::string command;
 
-    while (std::getline(std::cin, user_input))
+    // Loop while input stream in good state
+    // Read command keywords and pass data to relevant functions
+    while (std::cin >> command)
     {
-        if (user_input == "exit")
-            break;
+        std::string data;
+        std::getline(std::cin, data);
 
-        collection.take_action(user_input);
+        if (command == "exit")              // exit command closes the program
+            break;
+        else if (command == "add")          // add game
+            collection.add_game(data);
+        else if (command == "remove")       // remove game
+            collection.remove_game(data);
+        else if (command == "list")         // list games
+            collection.list_games();
+        else
+            std::cout << "Command unrecognised, disregarded." << std::endl;
     }
 }
