@@ -10,3 +10,17 @@ add_executable(game-collection-tracker
     src/Collection.cpp
     src/Game.cpp
 )
+
+enable_testing()
+
+add_executable(test_suite
+    tests/test_main.cpp
+    tests/test_Game.cpp
+    tests/test_Collection.cpp
+    src/Collection.cpp
+    src/Game.cpp
+)
+
+target_include_directories(test_suite PRIVATE src)
+
+add_test(NAME test_suite COMMAND test_suite)
