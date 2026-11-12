@@ -9,8 +9,10 @@ private:
     std::vector<Game> games;
     unsigned int next_game_id{0};
 
+    std::vector<Game>::iterator find_game(const std::string& game_title);
+
 public:
-    void add_game(const std::string &game_title);
-    void remove_game(const std::string &game_title);
-    void list_games() const;
+    bool add_game(const std::string &game_title);
+    bool remove_game(const std::string &game_title);
+    bool list_games() const;
 };
