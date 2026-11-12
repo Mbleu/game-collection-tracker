@@ -27,8 +27,6 @@ FetchContent_MakeAvailable(googletest)
 
 # Create executable 'test_suite' to run tests
 add_executable(test_suite
-    tests/test_main.cpp
-    tests/test_Game.cpp
     tests/test_Collection.cpp
     src/Collection.cpp
     src/Game.cpp

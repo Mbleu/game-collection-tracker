@@ -30,5 +30,5 @@ TEST(CollectionTests, list_games)
     EXPECT_TRUE(collection.list_games()) << "Empty collection";
     ASSERT_TRUE(collection.add_game("Runescape")) << "Test setup failed: add_game failed";
     ASSERT_TRUE(collection.add_game("World of Warcraft")) << "Test setup failed: add_game failed";
-    EXPECT_TRUE(collection.list_games()) << "Runescape\nWorld of Warcraft\n";
+    EXPECT_TRUE(collection.list_games()) << "With games";
 }
