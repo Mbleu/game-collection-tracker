@@ -1,11 +1,15 @@
+# Abort this script if min version of cmake not installed
 cmake_minimum_required(VERSION 3.20)
 
+# Name my project
 project(game-collection-tracker)
 
+# Announce min standard of C++ that the code requires compiler to have
 set(CMAKE_CXX_STANDARD 20)
+# Abort this script if min standard not met
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Create executable 'game-collection-tracker' of program
+# Build executable 'game-collection-tracker' using source files
 add_executable(game-collection-tracker
     src/main.cpp
     src/Collection.cpp
@@ -15,7 +19,7 @@ add_executable(game-collection-tracker
 # Enable CTest
 enable_testing()
 
-# Fetch googletest 
+# Fetch googletest
 include(FetchContent)
 FetchContent_Declare(
     googletest
@@ -25,17 +29,20 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-# Create executable 'test_suite' to run tests
+# Build executable 'test_suite' from test source files
 add_executable(test_suite
     tests/test_Collection.cpp
     src/Collection.cpp
     src/Game.cpp
 )
 
-# Add src/ as include for 'test_suite'
+# Add src/ as a directory in which 'test_suite's #includes can find .h files
 target_include_directories(test_suite PRIVATE src)
 
 # Link the googletest library to 'test_suite'
 target_link_libraries(test_suite PRIVATE GTest::gtest_main)
 
-add_test(NAME test_suite COMMAND test_suite)
+# Add googletest commands to cmake
+include(GoogleTest)
+# Find tests in the googletest format and create cmake tests for them
+gtest_discover_tests(test_suite)
