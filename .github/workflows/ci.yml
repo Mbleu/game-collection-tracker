@@ -17,4 +17,4 @@ jobs:
         run: cmake --build build
 
       - name: Run test suite
-        run: ctest --test-dir build
+        run: ctest --test-dir build --quiet
