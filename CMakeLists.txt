@@ -35,7 +35,6 @@ FetchContent_MakeAvailable(googletest)
 add_executable(test_suite
     tests/test_Collection.cpp
     src/Collection.cpp
-    src/Game.cpp
 )
 
 # Add src/ as a directory in which 'test_suite's #includes can find .h files
