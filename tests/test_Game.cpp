@@ -4,6 +4,8 @@
 #include <iostream>
 #include <limits>
 
+#include <gtest/gtest.h>
+
 bool test_Game_constructor()
 {
     bool test_pass{true};

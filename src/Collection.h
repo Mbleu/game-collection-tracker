@@ -12,7 +12,7 @@ private:
     std::vector<Game>::iterator find_game(const std::string& game_title);
 
 public:
-    bool add_game(const std::string &game_title);
-    bool remove_game(const std::string &game_title);
-    bool list_games() const;
+    void add_game(const std::string &game_title);
+    void remove_game(const std::string &game_title);
+    const std::vector<Game> &get_games() const
 };
