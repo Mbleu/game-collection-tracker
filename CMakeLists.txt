@@ -15,6 +15,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(game-collection-tracker
     src/main.cpp
     src/Collection.cpp
+    src/UI.cpp
     src/Game.cpp
 )
 
