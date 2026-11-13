@@ -1,5 +1,6 @@
 #include "UI.h"
 #include <iostream>
+#include <sstream>
 
 // UI constructor. Stores reference to a collection.
 UI::UI(Collection &collection)
@@ -8,6 +9,8 @@ UI::UI(Collection &collection)
 // Runs the UI
 void UI::run()
 {
+    handle_output("Collection tracker running, please enter commands.");
+
     while(!exit)
     {
         std::string user_input{get_input()};
@@ -24,34 +27,64 @@ std::string UI::get_input() const
     return user_input;
 }
 
+void UI::handle_output(const std::string &user_output) const
+{
+    std::cout << user_output << std::endl;
+}
+
 void UI::handle_input(const std::string& user_input)
 {
+    // Split user input into command and data
     std::istringstream iss{user_input};
     std::string command;
     std::string data;
     iss >> command;
+    std::getline(iss >> std::ws, data);
 
-    // Read command keywords and pass data to relevant functions
-        
-    std::getline(std::cin, data);
-
-    if (command == "exit")              // exit command closes the program
+    // Call function based on command
+    if (command == "exit")                          // exit, close the program
         exit = true;
-    else if (command == "add")          // add game
-        collection.add_game(data);
-    else if (command == "remove")       // remove game
-        collection.remove_game(data);
-    else if (command == "list")         // list games
+    else if (command == "add")                      // add game
+    {
+        auto result{collection.add_game(data)};
+        if (result)
+            handle_output(data + "added.");
+        else
+            handle_output(result.error());
+    }
+    else if (command == "remove")                   // remove game
+    {
+        auto result{collection.remove_game(data)};
+        if (result)
+            handle_output(data + "removed.");
+        else
+            handle_output(result.error());
+    }
+    else if (command == "list")                     // list games
     {
         const auto &games{collection.get_games()};
 
         if (games.empty())
-            std::cout << "No games to list." << std::endl;
+            handle_output("No games to list.");
+        else
+        {  
+            // Create single string output to avoid multiple costly calls to handle_output
+            std::string user_output;
+            
+            // Put each title on a newline
+            for (const auto &game : games)
+            {
+                // Newline for all but the first title
+                if (!user_output.empty())
+                    user_output.push_back('\n');
 
-        for(const auto &game : games)
-            std::cout << game.get_title() << std::endl;
+                user_output.append(game.get_title());
+            }
+
+            handle_output(user_output);
+        }
+            
     }
-
     else
-        std::cout << "Command unrecognised, disregarded." << std::endl;
+        handle_output("Command not recognised, disregarded.");
 }

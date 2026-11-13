@@ -5,9 +5,11 @@ cmake_minimum_required(VERSION 3.20)
 project(game-collection-tracker)
 
 # Announce min standard of C++ that the code requires compiler to have
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 # Abort this script if min standard not met
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Do not allow compiler specific non-standard C++ features
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Build executable 'game-collection-tracker' using source files
 add_executable(game-collection-tracker

@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 // Class for storing game metadata
