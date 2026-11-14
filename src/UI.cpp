@@ -41,50 +41,63 @@ void UI::handle_input(const std::string& user_input)
     iss >> command;
     std::getline(iss >> std::ws, data);
 
+    bool fail{false};
+    std::string user_output;
+
     // Call function based on command
     if (command == "exit")                          // exit, close the program
+    {
         exit = true;
+        user_output = "Exiting.";
+    }
     else if (command == "add")                      // add game
     {
         auto result{collection.add_game(data)};
+
         if (result)
-            handle_output(data + "added.");
+            user_output = data + " added.";
         else
-            handle_output(result.error());
+        {
+            fail = true;
+            user_output = result.error();
+        }
     }
     else if (command == "remove")                   // remove game
     {
         auto result{collection.remove_game(data)};
+
         if (result)
-            handle_output(data + "removed.");
+            user_output = data + "removed.";
         else
-            handle_output(result.error());
+        {
+            fail = true;
+            user_output = result.error();
+        }
     }
     else if (command == "list")                     // list games
     {
         const auto &games{collection.get_games()};
 
         if (games.empty())
-            handle_output("No games to list.");
+            user_output = "No games to list.";
         else
         {  
-            // Create single string output to avoid multiple costly calls to handle_output
-            std::string user_output;
-            
             // Put each title on a newline
-            for (const auto &game : games)
+            for (auto it{games.begin()}; it < games.end(); ++it)
             {
                 // Newline for all but the first title
-                if (!user_output.empty())
+                if (it != games.begin())
                     user_output.push_back('\n');
 
-                user_output.append(game.get_title());
+                user_output.append(it->get_title());
             }
-
-            handle_output(user_output);
         }
-            
     }
-    else
-        handle_output("Command not recognised, disregarded.");
+    else                                            // unrecognised
+        user_output = "Command not recognised.";
+
+    if (fail)
+        user_output.append(" Command disregarded.");
+
+    handle_output(user_output);
 }

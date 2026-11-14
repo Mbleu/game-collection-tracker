@@ -47,18 +47,21 @@ std::vector<const Game*> Collection::search(const std::string& game_title) const
 // Add a new game to the collection
 std::expected<void, std::string> Collection::add_game(const std::string &game_title)
 {
+    // Reject empty title
+    if (game_title.empty())
+        return std::unexpected("Empty title.");                     // fail
+
+    // Reject title containing newline
+    if (game_title.find('\n') != std::string::npos)
+        return std::unexpected("Title contains newlines.");         // fail
+
     // Reject duplicate titles
-    if (find_game(game_title) == games.end())
-    {
-        // Fail
-        return std::unexpected(game_title + " already exists, command disregarded");
-    }
+    if (find_game(game_title) != games.end())
+        return std::unexpected(game_title + " already exists.");    // fail
 
     // Add game to collection
     games.push_back(Game{next_game_id++, game_title});
-
-    // Success
-    return {};
+    return {};                                                      // success
 }
 
 // Remove a game from the collection
