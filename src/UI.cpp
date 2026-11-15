@@ -9,7 +9,7 @@ UI::UI(Collection &collection)
 // Runs the UI
 void UI::run()
 {
-    handle_output("Collection tracker running, please enter commands.");
+    handle_output("Collection tracker running, please enter commands.\n");
 
     while(!exit)
     {
@@ -21,6 +21,9 @@ void UI::run()
 // Waits for user input from console and returns it
 std::string UI::get_input() const
 {
+    // Prompt user
+    handle_output("> ");
+
     std::string user_input;
     if (!std::getline(std::cin, user_input))
         throw "Input stream entered bad state";
@@ -29,14 +32,11 @@ std::string UI::get_input() const
 
 void UI::handle_output(const std::string &user_output) const
 {
-    std::cout << user_output << std::endl;
+    std::cout << user_output;
 }
 
 void UI::handle_input(const std::string& user_input)
 {
-    // Prompt user
-    handle_output("> ");
-
     // Split user input into command and data
     std::istringstream iss{user_input};
     std::string command;
@@ -44,47 +44,40 @@ void UI::handle_input(const std::string& user_input)
     iss >> command;
     std::getline(iss >> std::ws, data);
 
-    bool fail{false};
-    std::string user_output;
-
     // Call function based on command
     if (command == "exit")                          // exit, close the program
     {
         exit = true;
-        user_output = "Exiting.";
+        handle_output("exiting\n");
     }
     else if (command == "add")                      // add game
     {
         auto result{collection.add_game(data)};
 
         if (result)
-            user_output = data + " added.";
+            handle_output(data + " added\n");
         else
-        {
-            fail = true;
-            user_output = result.error();
-        }
+            handle_output(result.error() + '\n');
     }
     else if (command == "remove")                   // remove game
     {
         auto result{collection.remove_game(data)};
 
         if (result)
-            user_output = data + "removed.";
+            handle_output(data + " removed\n");
         else
-        {
-            fail = true;
-            user_output = result.error();
-        }
+            handle_output(result.error() + '\n');
     }
     else if (command == "list")                     // list games
     {
         const auto &games{collection.get_games()};
 
         if (games.empty())
-            user_output = "No games to list.";
+            handle_output("no games to list\n");
         else
-        {  
+        {
+            std::string user_output;
+
             // Put each title on a newline
             for (auto it{games.begin()}; it < games.end(); ++it)
             {
@@ -94,13 +87,10 @@ void UI::handle_input(const std::string& user_input)
 
                 user_output.append(it->get_title());
             }
+
+            handle_output(user_output + '\n');
         }
     }
     else                                            // unrecognised
-        user_output = "Command not recognised.";
-
-    if (fail)
-        user_output.append(" Command disregarded.");
-
-    handle_output(user_output);
+        handle_output("command not recognised\n");
 }
