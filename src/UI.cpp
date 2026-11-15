@@ -34,6 +34,9 @@ void UI::handle_output(const std::string &user_output) const
 
 void UI::handle_input(const std::string& user_input)
 {
+    // Prompt user
+    handle_output("> ");
+
     // Split user input into command and data
     std::istringstream iss{user_input};
     std::string command;

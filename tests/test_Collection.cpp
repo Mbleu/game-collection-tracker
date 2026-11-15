@@ -28,9 +28,10 @@ TEST(CollectionTests, add_game_rejects_title_with_newline)
 // {
 //     Collection collection;
 //     EXPECT_FALSE(collection.remove_game("World of Warcraft")) << "Function reported success despite empty collection.";
-//     ASSERT_TRUE(collection.add_game("World of Warcraft")) << ""
-//     ASSERT_TRUE(collection.add_game("Runescape")) << "Test setup failed: add_game failed";
-//     EXPECT_TRUE(collection.remove_game("Runescape")) << "Remove game";
+//     ASSERT_TRUE(collection.add_game("World of Warcraft")) << "Test setup failed, could not add game.";
+//     ASSERT_TRUE(collection.add_game("World of Warcraft Classic")) << "Test setup failed, could not add game.";
+//     EXPECT_TRUE(collection.remove_game("World of Warcraft")) << "Function reported failure.";
+//     EXPECT_TRUE(collection.get_games().size() == 1) << "";
 //     EXPECT_FALSE(collection.remove_game("Runescape")) << "Remove game that has already been removed";
 //     EXPECT_FALSE(collection.remove_game("Scaperune")) << "Remove game that doesn't exist";
 // }

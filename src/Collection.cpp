@@ -46,7 +46,7 @@ std::expected<void, std::string> Collection::validate_game_title(const std::stri
 
     // Reject duplicate titles
     if (find_game(game_title) != games.end())
-        return std::unexpected(game_title + " already exists.");            // fail
+        return std::unexpected('\"' + game_title + '\"' + " already exists.");            // fail
 
     return {};                                                              // success
 }
@@ -108,7 +108,7 @@ std::expected<void, std::string> Collection::remove_game(const std::string& game
     if (it == games.end())
     {
         // Fail
-        return std::unexpected{game_title + " not found, command disregarded"};
+        return std::unexpected{'\"' + game_title + '\"' + " not found."};
     }
 
     // Erase record
