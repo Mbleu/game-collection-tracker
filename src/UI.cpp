@@ -85,7 +85,7 @@ void UI::handle_input(const std::string& user_input)
                 if (it != games.begin())
                     user_output.push_back('\n');
 
-                user_output.append(it->get_title());
+                user_output.append(it->title);
             }
 
             handle_output(user_output + '\n');
@@ -108,11 +108,25 @@ void UI::handle_input(const std::string& user_input)
                 if (it != result.begin())
                     user_output.push_back('\n');
 
-                user_output.append((*it)->get_title());
+                user_output.append((*it)->title);
             }
 
             handle_output(user_output + '\n');
         }
+    }
+    else if (command == "modify")
+    {
+        // Split user input into command and data
+        const std::string &current_title{data};
+
+        std::string new_title{get_input()};
+
+        auto result{collection.modify_game(current_title, new_title)};
+
+        if (result)
+            handle_output("new title set\n");
+        else
+            handle_output(result.error() + '\n');
     }
     else                                            // unrecognised
         handle_output("command not recognised\n");

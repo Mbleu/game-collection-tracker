@@ -9,7 +9,7 @@ TEST(CollectionTests, add_game_works)
     ASSERT_TRUE(collection.add_game("World of Warcraft")) << "Function reported failure.";
     ASSERT_FALSE(collection.get_games().empty()) << "Games vector empty.";
     EXPECT_EQ(collection.get_games().size(), 1) << "More than 1 game added to vector.";
-    EXPECT_EQ(collection.get_games().back().get_title(), "World of Warcraft") << "Created game has incorrect title.";
+    EXPECT_EQ(collection.get_games().back().title, "World of Warcraft") << "Created game has incorrect title.";
 }
 TEST(CollectionTests, add_game_rejects_empty_title)
 {

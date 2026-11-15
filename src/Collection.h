@@ -22,4 +22,5 @@ public:
     std::vector<const Game*> search(const std::string &game_title) const;
     std::expected<void, std::string> add_game(const std::string &game_title);
     std::expected<void, std::string> remove_game(const std::string &game_title);
+    std::expected<void, std::string> modify_game(const std::string &current_game_title, const std::string &new_game_title);
 };

@@ -12,7 +12,7 @@ std::vector<Game>::const_iterator Collection::find_game(const std::string& game_
 {
     // Find game by title and return const iterator
     for (auto it{games.cbegin()}; it < games.cend(); ++it)
-        if (it->get_title() == game_title)
+        if (it->title == game_title)
             return it;
 
     // Return end iterator when game not found
@@ -22,7 +22,7 @@ std::vector<Game>::iterator Collection::find_game(const std::string& game_title)
 {
     // Find game by title and return iterator
     for (auto it{games.begin()}; it < games.end(); ++it)
-        if (it->get_title() == game_title)
+        if (it->title == game_title)
             return it;
 
     // Return end iterator when game not found
@@ -74,7 +74,7 @@ std::vector<const Game*> Collection::search(const std::string& game_title) const
     // Find matches and store pointers in vector
     for (const auto &game : games)
     {
-        if (game.get_title().find(game_title) != std::string::npos)
+        if (game.title.find(game_title) != std::string::npos)
             matching_games.push_back(&game);
     }
 
@@ -112,4 +112,22 @@ std::expected<void, std::string> Collection::remove_game(const std::string& game
     games.erase(it);
 
     return {};                                              // success
+}
+
+// Modifies a game title to something new
+std::expected<void, std::string> Collection::modify_game(const std::string &current_game_title, const std::string &new_game_title)
+{
+    auto it{find_game(current_game_title)};
+
+    // Check if game exists
+    if (it == games.end())
+        return std::unexpected{current_game_title + " not found"};  // fail
+
+    // Validate new title
+    if (auto result{validate_game_title(new_game_title)}; !result)
+        return std::unexpected{result.error()};                     // fail
+    
+    // Set new title
+    it->title = new_game_title;
+    return {};                                                      // success
 }
