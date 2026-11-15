@@ -91,6 +91,29 @@ void UI::handle_input(const std::string& user_input)
             handle_output(user_output + '\n');
         }
     }
+    else if (command == "search")
+    {
+        const auto &result{collection.search(data)};
+
+        if (result.empty())
+            handle_output("no games match search\n");
+        else
+        {
+            std::string user_output;
+
+            // Put each title on a newline
+            for (auto it{result.begin()}; it < result.end(); ++it)
+            {
+                // Newline for all but the first title
+                if (it != result.begin())
+                    user_output.push_back('\n');
+
+                user_output.append((*it)->get_title());
+            }
+
+            handle_output(user_output + '\n');
+        }
+    }
     else                                            // unrecognised
         handle_output("command not recognised\n");
 }
