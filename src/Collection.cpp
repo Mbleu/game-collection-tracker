@@ -3,23 +3,60 @@
 
 // Collection constructor
 Collection::Collection()
-    : next_game_id{0} {}
+    : last_issued_game_id{0} {}
 
 // Find a game in collection.
 // Returns game index if found.
 // Returns games.end() if not found.
-std::vector<Game>::iterator Collection::find_game(const std::string& game_title)
+std::vector<Game>::const_iterator Collection::find_game(const std::string& game_title) const
 {
-    // Find game by title
-    for (auto it{games.begin()}; it < games.end(); ++it)
-    {
-        // Return iterator to game when found
+    // Find game by title and return const iterator
+    for (auto it{games.cbegin()}; it < games.cend(); ++it)
         if (it->get_title() == game_title)
             return it;
-    }
 
     // Return end iterator when game not found
     return games.end();
+}
+std::vector<Game>::iterator Collection::find_game(const std::string& game_title)
+{
+    // Find game by title and return iterator
+    for (auto it{games.begin()}; it < games.end(); ++it)
+        if (it->get_title() == game_title)
+            return it;
+
+    // Return end iterator when game not found
+    return games.end();
+}
+
+// Check that game title conforms to naming rules
+std::expected<void, std::string> Collection::validate_game_title(const std::string &game_title) const
+{
+    // Reject empty titles
+    if (game_title.empty())
+        return std::unexpected("Title cannot be blank.");                   // fail
+
+    // Reject titles containing newlines
+    if (game_title.find('\n') != std::string::npos)
+        return std::unexpected("Title cannot contain newline chars.");      // fail
+
+    // Reject titles longer than 100chars
+    if (game_title.length() > 100)
+        return std::unexpected("Title cannot be longer than 100 chars.");   // fail
+
+    // Reject duplicate titles
+    if (find_game(game_title) != games.end())
+        return std::unexpected(game_title + " already exists.");            // fail
+
+    return {};                                                              // success
+}
+
+std::expected<unsigned int, std::string> Collection::generate_game_id()
+{
+    if (last_issued_game_id == std::numeric_limits<unsigned int>::max())
+        return std::unexpected{"Game IDs exhausted."};
+
+    return last_issued_game_id++;
 }
 
 // Return reference to games in collection
@@ -47,21 +84,18 @@ std::vector<const Game*> Collection::search(const std::string& game_title) const
 // Add a new game to the collection
 std::expected<void, std::string> Collection::add_game(const std::string &game_title)
 {
-    // Reject empty title
-    if (game_title.empty())
-        return std::unexpected("Empty title.");                     // fail
+    // Validate title
+    if (auto result{validate_game_title(game_title)}; !result)
+        return std::unexpected{result.error()};                 // fail
 
-    // Reject title containing newline
-    if (game_title.find('\n') != std::string::npos)
-        return std::unexpected("Title contains newlines.");         // fail
-
-    // Reject duplicate titles
-    if (find_game(game_title) != games.end())
-        return std::unexpected(game_title + " already exists.");    // fail
+    // Generate id
+    auto game_id{generate_game_id()};
+    if (!game_id)
+        return std::unexpected{game_id.error()};                // fail
 
     // Add game to collection
-    games.push_back(Game{next_game_id++, game_title});
-    return {};                                                      // success
+    games.push_back(Game{game_id.value(), game_title});
+    return {};                                                  // success
 }
 
 // Remove a game from the collection

@@ -9,9 +9,12 @@ class Collection
 {
 private:
     std::vector<Game> games;
-    unsigned int next_game_id;
+    unsigned int last_issued_game_id;
 
-    std::vector<Game>::iterator find_game(const std::string& game_title);
+    std::vector<Game>::const_iterator find_game(const std::string &game_title) const;
+    std::vector<Game>::iterator find_game(const std::string &game_title);
+    std::expected<void, std::string> validate_game_title(const std::string &game_title) const;
+    std::expected<unsigned int, std::string> generate_game_id();
 
 public:
     Collection();
