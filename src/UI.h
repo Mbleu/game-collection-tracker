@@ -2,11 +2,12 @@
 #include "Collection.h"
 #include <string>
 
+// Handles user interaction to promote modularity
 class UI
 {
     private:
         Collection &collection;
-        bool exit;
+        bool exit;  // program closes on next loop when true
 
         std::string get_input() const;
         void handle_output(const std::string &user_output) const;

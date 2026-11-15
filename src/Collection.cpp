@@ -1,27 +1,28 @@
 #include "Collection.h"
 #include <limits>
+#include <cctype>
 
 // Collection constructor
 Collection::Collection()
     : last_issued_game_id{0} {}
 
-// Find a game in collection.
-// Returns game index if found.
-// Returns games.end() if not found.
-std::vector<Game>::const_iterator Collection::find_game(const std::string& game_title) const
+// Find a game in collection and return iterator if found, otherwise returns end()
+std::vector<Game>::iterator Collection::find_game(const std::string& game_title)
 {
-    // Find game by title and return const iterator
-    for (auto it{games.cbegin()}; it < games.cend(); ++it)
+    // Find game by title and return iterator
+    for (auto it{games.begin()}; it < games.end(); ++it)
         if (it->title == game_title)
             return it;
 
     // Return end iterator when game not found
     return games.end();
 }
-std::vector<Game>::iterator Collection::find_game(const std::string& game_title)
+
+// Const overload for use by const functions
+std::vector<Game>::const_iterator Collection::find_game(const std::string& game_title) const
 {
-    // Find game by title and return iterator
-    for (auto it{games.begin()}; it < games.end(); ++it)
+    // Find game by title and return const iterator
+    for (auto it{games.cbegin()}; it < games.cend(); ++it)
         if (it->title == game_title)
             return it;
 
@@ -34,7 +35,18 @@ std::expected<void, std::string> Collection::validate_game_title(const std::stri
 {
     // Reject empty titles
     if (game_title.empty())
-        return std::unexpected("Title cannot be blank.");                   // fail
+        return std::unexpected("Title cannot be empty.");                   // fail
+
+    // Reject titles containing only whitespace
+    bool only_whitespace{true};
+    for (unsigned char c : game_title){
+        if (!std::isspace(c)){
+            only_whitespace = false;
+            break;
+        }
+    }
+    if (only_whitespace)
+        return std::unexpected("Title cannot contain only whitespace.");    // fail
 
     // Reject titles containing newlines
     if (game_title.find('\n') != std::string::npos)

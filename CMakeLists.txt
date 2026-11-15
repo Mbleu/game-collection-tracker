@@ -32,21 +32,21 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-# Build executable 'test_suite' from test source files
-add_executable(test_suite
+# Build executable 'test-game-collection-tracker' from test source files
+add_executable(test-game-collection-tracker
     tests/test_Collection.cpp
     src/Collection.cpp
     src/UI.cpp
     src/Game.cpp
 )
 
-# Add src/ as a directory in which 'test_suite's #includes can find .h files
-target_include_directories(test_suite PRIVATE src)
+# Add src/ as a directory in which 'test-game-collection-tracker's #includes can find .h files
+target_include_directories(test-game-collection-tracker PRIVATE src)
 
-# Link the googletest library to 'test_suite'
-target_link_libraries(test_suite PRIVATE GTest::gtest_main)
+# Link the googletest library to 'test-game-collection-tracker'
+target_link_libraries(test-game-collection-tracker PRIVATE GTest::gtest_main)
 
 # Add googletest commands to cmake
 include(GoogleTest)
 # Find tests in the googletest format and create cmake tests for them
-gtest_discover_tests(test_suite)
+gtest_discover_tests(test-game-collection-tracker)
