@@ -1,7 +1,9 @@
 # Programming Fundamentals: Assessment 1  
-## PixelForge Interactive - Game Collection Tracker  
-### Requirements  
-#### Functional  
+# PixelForge Interactive - Game Collection Tracker  
+
+## Requirements  
+
+### Functional  
 A functional game collection tracker application that allows users to:
 - Add games to their collection
 - View games collection
@@ -9,7 +11,7 @@ A functional game collection tracker application that allows users to:
 - Update game information: name, location
 - Remove games from the collection
 
-#### Non-Functional
+### Non-Functional
 - Application should start quickly and have no noticeable delay when responding to user input
 - Compiled executable size should be as small as possible
 - Application should present information clearly and provide clear responses to user input
@@ -21,7 +23,7 @@ A functional game collection tracker application that allows users to:
 - Search folders for .exe to automatically add games
 - Ability to launch games from the collection view
 
-### Design
+## Design
 #### Paradigm
 Object Oriented Programming
 Reusable components
@@ -33,14 +35,14 @@ Add, Remove, Modify, List, Find
 
 Artefact: UML Diagram
 
-### Testing
+## Testing
 - Unit tests
 - Pre and post conditions
 - Asserts?
 - Integration testing
 - Automated Testing Pipelines
 
-### Debugging
-### Technical Documentation
-### Software Prototype
-### References
+## Debugging
+## Technical Documentation
+## Software Prototype
+## References

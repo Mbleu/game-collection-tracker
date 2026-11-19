@@ -4,14 +4,14 @@
 
 // UI constructor. Stores reference to a collection.
 UI::UI(Collection &collection)
-    : collection{collection}, exit{false} {}
+    : collection{collection} {}
 
 // Runs the UI
 void UI::run()
 {
     handle_output("Collection tracker running, please enter commands.\n");
 
-    while(!exit)
+    while(!exit_flag)
     {
         std::string user_input{get_input()};
         handle_input(user_input);
@@ -30,11 +30,13 @@ std::string UI::get_input() const
     return user_input;
 }
 
+// Outputs a string to console
 void UI::handle_output(const std::string &user_output) const
 {
     std::cout << user_output;
 }
 
+// Splits input into command and data, then calls the corresponding function
 void UI::handle_input(const std::string& user_input)
 {
     // Split user input into command and data
@@ -45,89 +47,110 @@ void UI::handle_input(const std::string& user_input)
     std::getline(iss >> std::ws, data);
 
     // Call function based on command
-    if (command == "exit")                          // exit, close the program
-    {
-        exit = true;
-        handle_output("exiting\n");
-    }
-    else if (command == "add")                      // add game
-    {
-        auto result{collection.add_game(data)};
-
-        if (result)
-            handle_output(data + " added\n");
-        else
-            handle_output(result.error() + '\n');
-    }
-    else if (command == "remove")                   // remove game
-    {
-        auto result{collection.remove_game(data)};
-
-        if (result)
-            handle_output(data + " removed\n");
-        else
-            handle_output(result.error() + '\n');
-    }
-    else if (command == "list")                     // list games
-    {
-        const auto &games{collection.get_games()};
-
-        if (games.empty())
-            handle_output("no games to list\n");
-        else
-        {
-            std::string user_output;
-
-            // Put each title on a newline
-            for (auto it{games.begin()}; it < games.end(); ++it)
-            {
-                // Newline for all but the first title
-                if (it != games.begin())
-                    user_output.push_back('\n');
-
-                user_output.append(it->title);
-            }
-
-            handle_output(user_output + '\n');
-        }
-    }
+    if (command == "exit")
+        exit();
+    else if (command == "add")
+        add(data);
+    else if (command == "remove")
+        remove(data);
+    else if (command == "list")
+        list();
     else if (command == "search")
-    {
-        const auto &result{collection.search(data)};
-
-        if (result.empty())
-            handle_output("no games match search\n");
-        else
-        {
-            std::string user_output;
-
-            // Put each title on a newline
-            for (auto it{result.begin()}; it < result.end(); ++it)
-            {
-                // Newline for all but the first title
-                if (it != result.begin())
-                    user_output.push_back('\n');
-
-                user_output.append((*it)->title);
-            }
-
-            handle_output(user_output + '\n');
-        }
-    }
+        search(data);
     else if (command == "modify")
-    {
-        // Split user input into command and data
-        const std::string &current_title{data};
-
-        std::string new_title{get_input()};
-
-        auto result{collection.modify_game(current_title, new_title)};
-
-        if (result)
-            handle_output("new title set\n");
-        else
-            handle_output(result.error() + '\n');
-    }
-    else                                            // unrecognised
+        modify(data);
+    else // unrecognised
         handle_output("command not recognised\n");
+}
+
+// Exit, close the program
+void UI::exit()
+{
+    exit_flag = true;
+    handle_output("exiting\n");
+}
+
+// Add game to collection
+void UI::add(const std::string &title)
+{
+    auto result{collection.add_game(title)};
+
+    if (result)
+        handle_output(title + " added\n");
+    else
+        handle_output(result.error() + '\n');
+}
+
+// Remove game from collection
+void UI::remove(const std::string &title)
+{
+    auto result{collection.remove_game(title)};
+
+    if (result)
+        handle_output(title + " removed\n");
+    else
+        handle_output(result.error() + '\n');
+}
+
+// List all games in collection
+void UI::list()
+{
+    const auto &games{collection.get_games()};
+
+    if (games.empty())
+        handle_output("no games to list\n");
+    else
+    {
+        std::string user_output;
+
+        // Put each title on a newline
+        for (auto it{games.begin()}; it < games.end(); ++it)
+        {
+            // Newline for all but the first title
+            if (it != games.begin())
+                user_output.push_back('\n');
+
+            user_output.append(it->title);
+        }
+
+        handle_output(user_output + '\n');
+    }
+}
+
+// Search for a game in the collection by title
+void UI::search(const std::string &title)
+{
+    const auto &result{collection.search(title)};
+
+    if (result.empty())
+        handle_output("no games match search\n");
+    else
+    {
+        std::string user_output;
+
+        // Put each title on a newline
+        for (auto it{result.begin()}; it < result.end(); ++it)
+        {
+            // Newline for all but the first title
+            if (it != result.begin())
+                user_output.push_back('\n');
+
+            user_output.append((*it)->title);
+        }
+
+        handle_output(user_output + '\n');
+    }
+}
+
+// Modify a title in the collection
+void UI::modify(const std::string &title_from)
+{
+    std::string title_to{get_input()};
+
+    auto result{collection.modify_game(title_from, title_to)};
+
+    if (result)
+        handle_output("new title set\n");
+    else
+        handle_output(result.error() + '\n');
 }

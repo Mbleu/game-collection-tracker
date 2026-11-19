@@ -9,7 +9,7 @@ class Collection
 {
 private:
     std::vector<Game> games;
-    unsigned int last_issued_game_id;
+    unsigned int last_issued_game_id{0};
 
     std::vector<Game>::iterator find_game(const std::string &game_title);   // helper function for finding a game by title
     std::vector<Game>::const_iterator find_game(const std::string &game_title) const;
@@ -17,7 +17,6 @@ private:
     std::expected<unsigned int, std::string> generate_game_id();
 
 public:
-    Collection();
     const std::vector<Game> &get_games() const;
     std::vector<const Game*> search(const std::string &game_title) const;   // returns full and partial matches
     std::expected<void, std::string> add_game(const std::string &game_title);

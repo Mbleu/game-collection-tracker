@@ -2,10 +2,6 @@
 #include <limits>
 #include <cctype>
 
-// Collection constructor
-Collection::Collection()
-    : last_issued_game_id{0} {}
-
 // Find a game in collection and return iterator if found, otherwise returns end()
 std::vector<Game>::iterator Collection::find_game(const std::string& game_title)
 {
