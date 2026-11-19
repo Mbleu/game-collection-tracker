@@ -1,5 +1,6 @@
 #pragma once
 #include "Collection.h"
+#include "FileManager.h"
 #include <string>
 
 // Handles user interaction to promote modularity
@@ -7,6 +8,7 @@ class UI
 {
     private:
         Collection &collection;
+        FileManager file_manager;
         bool exit_flag{false}; // program closes on next loop when true
 
         std::string get_input() const;

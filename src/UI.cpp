@@ -1,14 +1,13 @@
 #include "UI.h"
-#include "load.h"
 #include <iostream>
 #include <sstream>
 
 // UI constructor. Stores reference to a collection.
 UI::UI(Collection &collection)
-    : collection{collection}
+    : collection{collection}, file_manager{collection}
 {
     // Loads games from file
-    auto result{load(collection)};
+    auto result{file_manager.load()};
     if (!result)
         handle_output(result.error() + '\n');
 }
@@ -83,7 +82,14 @@ void UI::add(const std::string &title)
     auto result{collection.add_game(title)};
 
     if (result)
+    {
         handle_output(title + " added\n");
+
+        auto save_result{file_manager.save()};
+
+        if (!save_result)
+            handle_output("Could not save: " + save_result.error() + '\n');
+    }
     else
         handle_output(result.error() + '\n');
 }
@@ -94,7 +100,14 @@ void UI::remove(const std::string &title)
     auto result{collection.remove_game(title)};
 
     if (result)
+    {
         handle_output(title + " removed\n");
+
+        auto save_result{file_manager.save()};
+
+        if (!save_result)
+            handle_output("Could not save: " + save_result.error() + '\n');
+    }
     else
         handle_output(result.error() + '\n');
 }
@@ -157,7 +170,15 @@ void UI::modify(const std::string &title_from)
     auto result{collection.modify_game(title_from, title_to)};
 
     if (result)
+    {
         handle_output("new title set\n");
+
+        // Save change to file
+        auto save_result{file_manager.save()};
+
+        if (!save_result)
+            handle_output("Could not save: " + save_result.error() + '\n');
+    }
     else
         handle_output(result.error() + '\n');
 }

@@ -28,7 +28,7 @@ add_executable(game-collection-tracker
     src/Collection.cpp
     src/UI.cpp
     src/Game.cpp
-    src/load.cpp
+    src/FileManager.cpp
 )
 
 # Link the nlohmann json library to 'game-collection-tracker'
@@ -52,7 +52,7 @@ add_executable(test-game-collection-tracker
     src/Collection.cpp
     src/UI.cpp
     src/Game.cpp
-    src/load.cpp
+    src/FileManager.cpp
 )
 
 # Add src/ as a directory in which 'test-game-collection-tracker's #includes can find .h files
