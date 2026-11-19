@@ -1,17 +1,24 @@
 #include "UI.h"
+#include "load.h"
 #include <iostream>
 #include <sstream>
 
 // UI constructor. Stores reference to a collection.
 UI::UI(Collection &collection)
-    : collection{collection} {}
+    : collection{collection}
+{
+    // Loads games from file
+    auto result{load(collection)};
+    if (!result)
+        handle_output(result.error() + '\n');
+}
 
 // Runs the UI
 void UI::run()
 {
     handle_output("Collection tracker running, please enter commands.\n");
 
-    while(!exit_flag)
+    while (!exit_flag)
     {
         std::string user_input{get_input()};
         handle_input(user_input);
@@ -37,7 +44,7 @@ void UI::handle_output(const std::string &user_output) const
 }
 
 // Splits input into command and data, then calls the corresponding function
-void UI::handle_input(const std::string& user_input)
+void UI::handle_input(const std::string &user_input)
 {
     // Split user input into command and data
     std::istringstream iss{user_input};
